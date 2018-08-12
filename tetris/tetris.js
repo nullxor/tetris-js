@@ -61,12 +61,36 @@ const TETROMINO_T =
   ],  
 ];
 
+const TETROMINO_L =
+[
+  [
+    [1, 0, 0],
+    [1, 1, 1],
+    [0, 0, 0],
+  ], 
+  [
+    [0, 1, 1],
+    [0, 1, 0],
+    [0, 1, 0],
+  ],
+  [
+    [0, 0, 0],
+    [1, 1, 1],
+    [0, 0, 1],
+  ],
+  [
+    [0, 0, 1],
+    [0, 0, 1],
+    [0, 1, 1],
+  ],  
+];
+
 class Tetris {
   constructor(canvasId, config = defaultConfig) {
     this.field = new Field(document.getElementById(canvasId));
     this.config = config;
     this.field.table();
-    this.tetrominoes = [TETROMINO_I, TETROMINO_S, TETROMINO_T, TETROMINO_Q];
+    this.tetrominoes = [TETROMINO_I, TETROMINO_S, TETROMINO_T, TETROMINO_Q, TETROMINO_L];
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
   }
