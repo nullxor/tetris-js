@@ -1,9 +1,7 @@
 class Tetromino {
-  constructor(startX, startY, color, type, field, config = defaultConfig) {
+  constructor(startX, startY, color, type) {
     [this.x, this.y, this.color, this.type] = [startX, startY, color, type];
-    this.field = field;
     this.rotation = 0;
-    this.config = config;
     this.locked = false;
   }
   

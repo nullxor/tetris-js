@@ -50,9 +50,9 @@ const TETROMINO_T =
     [0, 1, 0],
   ],
   [
-    [0, 0, 0],
     [1, 1, 1],
     [0, 1, 0],
+    [0, 0, 0],
   ],
   [
     [0, 1, 0],
@@ -74,9 +74,9 @@ const TETROMINO_L =
     [0, 1, 0],
   ],
   [
-    [0, 0, 0],
     [1, 1, 1],
     [0, 0, 1],
+    [0, 0, 0],
   ],
   [
     [0, 0, 1],
@@ -87,9 +87,10 @@ const TETROMINO_L =
 
 class Tetris {
   constructor(canvasId, config = defaultConfig) {
-    this.field = new Field(document.getElementById(canvasId));
     this.config = config;
-    this.field.table();
+    this.field = new Field(config.rows, config.columns);
+    this.drawer = new Drawer(document.getElementById(canvasId), this.field, config);
+    this.drawer.table();
     this.tetrominoes = [TETROMINO_I, TETROMINO_S, TETROMINO_T, TETROMINO_Q, TETROMINO_L];
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
@@ -99,7 +100,7 @@ class Tetris {
     const colors = ['#d11', '#1d1', '#11d', '#dd1', '#d1d', '#1cd'];
     const randomColor = Math.floor(Math.random() * (colors.length));
     const randomIndex = Math.floor(Math.random() * (this.tetrominoes.length));
-    return new Tetromino((this.config.columns / 2) - 1 , 0, colors[randomColor], this.tetrominoes[randomIndex], this.field);
+    return new Tetromino((this.config.columns / 2) - 1 , 0, colors[randomColor], this.tetrominoes[randomIndex]);
   }
 
   // 1 Left collision, 2 right collision, 3 bottom collision
@@ -114,7 +115,7 @@ class Tetris {
           if (testX < 0) return 1;
           if (testX >= this.config.columns) return 2;
           if (testY >= this.config.rows) return 3;
-          if (this.field.isFull(testX, testY)) return 4;
+          if (this.field.isFullBlock(testX, testY))  return 4;
         }
       }
     }
@@ -127,7 +128,7 @@ class Tetris {
       for (let col = 0; col < matrix.length; col++) {
         if (matrix[row][col] > 0) {
           const x = tetromino.getX() + col, y = tetromino.getY() + row;
-          this.field.square(x, y, color, borderColor);
+          this.drawer.block(x, y, color, borderColor);
         }
       }
     }
@@ -135,6 +136,10 @@ class Tetris {
 
   setKeyListeners() {
     document.addEventListener('keydown', (e) => {
+      if (this.currentTetromino.isLocked()) {
+        return false;
+      }
+
       const isArrow = [37, 38, 39, 40].indexOf(e.keyCode) !== -1;
       if (isArrow) { 
         this.drawTetromino(this.currentTetromino, this.config.blankColor);
@@ -172,30 +177,32 @@ class Tetris {
       }
       // Down
       if (e.keyCode === 40) {
-        if (this.isThereCollision(0, 1)) {
-          this.currentTetromino.lock();
-          this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
-          const bottomY = this.currentTetromino.getBottomY();
-          let y = bottomY;
-          while (y >= this.currentTetromino.getY()) {
-            if (this.field.isFullRow(y)) {
-              this.field.moveBlock(y - 1, y);
-            } else {
-              y--;
-            }
-          }
-          return;
-        } else {
-          this.currentTetromino.moveDown();
-        }
-      }
-      if (e.keyCode === 32) {
-        this.currentTetromino = this.getRandomTetromino();
-        this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+        this.checkDown();
+        return;
       }
       if (isArrow) {
         this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
       }
     });
+  }
+
+  checkDown() {
+    this.drawTetromino(this.currentTetromino, this.config.blankColor);
+    if (this.isThereCollision(0, 1)) {
+      this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+      this.currentTetromino.lock();
+      let y = this.currentTetromino.getBottomY();
+      while (y >= this.currentTetromino.getY()) {
+        if (this.field.isFullRow(y)) {
+          this.drawer.moveBlock(y - 1, y);
+        } else {
+          y--;
+        }
+      }
+      this.currentTetromino = this.getRandomTetromino();
+    } else {
+      this.currentTetromino.moveDown();
+    }
+    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
   }
 }
