@@ -2,31 +2,32 @@
  * Allow to draw and handle blocks operations in a Canvas
  */
 class Drawer {
-  constructor(canvas, field, config = defaultConfig) {
+  constructor(canvas, field, blockSize, blankColor) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.field = field;
-    this.config = config;
+    this.blockSize = blockSize;
+    this.blankColor = blankColor;
   }
 
-  block(x, y, color, borderColor) {
-    const realX = x * this.config.blockSize, realY = y * this.config.blockSize;
-    this.ctx.fillStyle = color;
-    this.ctx.fillRect(realX, realY, this.config.blockSize, this.config.blockSize);
+  block(x, y, backgroundColor, borderColor = backgroundColor) {
+    const realX = x * this.blockSize, realY = y * this.blockSize;
+    this.ctx.fillStyle = backgroundColor;
+    this.ctx.fillRect(realX, realY, this.blockSize, this.blockSize);
     this.ctx.strokeStyle = borderColor;
-    this.ctx.strokeRect(realX, realY, this.config.blockSize, this.config.blockSize);
-    this.field.setBlock(x, y, color !== this.config.blankColor, color, borderColor);
+    this.ctx.strokeRect(realX, realY, this.blockSize, this.blockSize);
+    this.field.setBlock(x, y, backgroundColor !== this.blankColor, backgroundColor, borderColor);
   }
   
-  table() {
-    for (let row = 0; row < this.config.rows; row++) {
-      for (let col = 0; col < this.config.columns; col++) {
-        this.block(col, row, this.config.blankColor, this.config.borderColor);
+  grid(rows, cols, backgroundColor, borderColor) {
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        this.block(col, row, backgroundColor, borderColor);
       }
     }
   }
 
-  moveBlock(yFrom, yTo) {
+  moveRows(yFrom, yTo) {
     let i = 0;
     for (let y = yFrom; y >= 0; y--) {
       this.moveRow(y, yTo - i++);
@@ -35,7 +36,8 @@ class Drawer {
   }  
 
   moveRow(yFrom, yTo) {
-    for (let x = 0; x < this.config.columns; x++) {
+    const columns = this.field.getRow(yFrom).length;
+    for (let x = 0; x < columns; x++) {
       const value = this.field.getBlock(x, yFrom);
       if (value) {
         this.field.setBlock(x, yTo, value.isFull, value.color, value.borderColor)
@@ -44,10 +46,11 @@ class Drawer {
     }
   }
 
-  removeRow(y) {
-    for (let x = 0; x < this.config.columns; x++) {
-      this.field.removeBlock(x, y);
-      this.block(x, y, this.config.blankColor, this.config.blankColor);
+  removeRow(rowNumber) {
+    const columns = this.field.getRow(rowNumber).length;
+    for (let x = 0; x < columns; x++) {
+      this.field.removeBlock(x, rowNumber);
+      this.block(x, rowNumber, this.blankColor, this.blankColor);
     }
   }
 }

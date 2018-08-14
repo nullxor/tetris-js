@@ -89,15 +89,15 @@ class Tetris {
   constructor(canvasId, config = defaultConfig) {
     this.config = config;
     this.field = new Field(config.rows, config.columns);
-    this.drawer = new Drawer(document.getElementById(canvasId), this.field, config);
-    this.drawer.table();
+    this.drawer = new Drawer(document.getElementById(canvasId), this.field,  this.config.blockSize, this.config.blankColor);
+    this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
     this.tetrominoes = [TETROMINO_I, TETROMINO_S, TETROMINO_T, TETROMINO_Q, TETROMINO_L];
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
   }
 
   getRandomTetromino() {
-    const colors = ['#d11', '#1d1', '#11d', '#dd1', '#d1d', '#1cd'];
+    const colors = ['#d11', '#1d1', '#11d', '#dd1', '#d1d', '#1cd', '#fdd'];
     const randomColor = Math.floor(Math.random() * (colors.length));
     const randomIndex = Math.floor(Math.random() * (this.tetrominoes.length));
     return new Tetromino((this.config.columns / 2) - 1 , 0, colors[randomColor], this.tetrominoes[randomIndex]);
@@ -194,12 +194,13 @@ class Tetris {
       let y = this.currentTetromino.getBottomY();
       while (y >= this.currentTetromino.getY()) {
         if (this.field.isFullRow(y)) {
-          this.drawer.moveBlock(y - 1, y);
+          this.drawer.moveRows(y - 1, y);
         } else {
           y--;
         }
       }
       this.currentTetromino = this.getRandomTetromino();
+      console.log(this.field.getMatrix());
     } else {
       this.currentTetromino.moveDown();
     }

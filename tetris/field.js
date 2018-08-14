@@ -48,26 +48,6 @@ class Field {
   }
 
   /**
-   * Removes a block from the given X - Y Coordinate
-   * @param {number} x X
-   * @param {number} y Y
-   */
-  removeBlock(x, y) {
-    this.field[y][x] = false;
-  }
-
-  /**
-   * Checks if the row has any full block at the given Y coordinate
-   * @param {number} y Y
-   */
-  rowHasAnyFull(y) {
-    for (let x = 0; x < this.field[y].length; x++) {
-      if (this.field[y][x].isFull) return true;
-    }
-    return false;
-  }
-
-  /**
    * Checks if the block is full at the given X - Y coordinates 
    * @param {number} x X
    * @param {number} y Y
@@ -77,12 +57,40 @@ class Field {
   }
 
   /**
-   * Checks if the whole row is full at the given Y coordinate
+   * Removes a block from the given X - Y Coordinate
+   * @param {number} x X
    * @param {number} y Y
    */
-  isFullRow(y) {
+  removeBlock(x, y) {
+    this.field[y][x] = false;
+  }
+
+  /**
+   * Retrieves the row at the given rowNumber
+   * @param {number} rowNumber Row number
+   */
+  getRow(rowNumber) {
+    return this.field[rowNumber];
+  }
+
+  /**
+   * Checks if the row has any full block at the given rowNumber
+   * @param {number} rowNumber Row number
+   */
+  rowHasAnyFull(rowNumber) {
+    for (let x = 0; x < this.field[rowNumber].length; x++) {
+      if (this.field[rowNumber][x].isFull) return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks if the whole row is full at the given Y coordinate
+   * @param {number} rowNumber Y
+   */
+  isFullRow(rowNumber) {
     for (let x = 0; x < this.cols; x++) {
-      if (!this.field[y][x].isFull) return false;
+      if (!this.field[rowNumber][x].isFull) return false;
     }
     return true;
   }
