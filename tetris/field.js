@@ -85,8 +85,8 @@ class Field {
   }
 
   /**
-   * Checks if the whole row is full at the given Y coordinate
-   * @param {number} rowNumber Y
+   * Checks if the whole row is full at the given rowNumber
+   * @param {number} rowNumber Row number
    */
   isFullRow(rowNumber) {
     for (let x = 0; x < this.cols; x++) {
