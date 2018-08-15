@@ -51,7 +51,14 @@ body {
   font-size: 2em;
   text-align: center;
 }
+.text-center {
+  text-align: center;
+}
 button {
   font-family: Helvetica;
   padding: 1%;
+}
+.next-piece {
+  text-align: center;
+  margin-top: 5%;
 }

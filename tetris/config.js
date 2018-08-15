@@ -149,7 +149,7 @@ const defaultConfig = {
   tetrominoes: [
     TETROMINO_I,
     TETROMINO_S,
-    TETROMINO_S,
+    TETROMINO_Z,
     TETROMINO_T,
     TETROMINO_Q,
     TETROMINO_L,
