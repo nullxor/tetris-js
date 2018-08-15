@@ -65,7 +65,7 @@ class Tetris {
     const matrix = tetromino.getCurrentMatrix();
     for (let row = 0; row < matrix.length; row++) {
       for (let col = 0; col < matrix.length; col++) {
-        if (matrix[row][col] > 0) {
+        if (matrix[row][col]) {
           const x = tetromino.getX() + col, y = tetromino.getY() + row;
           this.drawer.block(x, y, color, borderColor);
         }
@@ -128,9 +128,7 @@ class Tetris {
         }
       }
       // Draws the Tetromino at the new Position / Rotation
-      if (isArrow) {
-        this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
-      }
+      this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
     });
   }
 }
