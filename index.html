@@ -6,44 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Tetris</title>
   <link href="https://fonts.googleapis.com/css?family=Nova+Square" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Nova Square', cursive;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      background-color: #f7f7f7;
-    }
-    .container {
-      padding: 1%;
-    }
-    .canvas-wrap {
-      clear: both;
-      overflow: hidden;
-      width: 420px;
-
-    }
-    .info-box {
-      border: 1px solid #ccc;
-      box-shadow: #ccc 0 0 5px;
-      clear: both;
-      font-size: 1.5em;
-      overflow: hidden;
-      padding: 3%;
-    }
-    .info-box .left {
-      float: left;
-    }
-    .info-box .right {
-      float: right;
-    }
-    .info, .canvas {
-      width: 50%;
-      float: left;
-    }
-  </style> 
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <script src="tetris/config.js"></script>
@@ -61,6 +24,16 @@
           <div class="info-box">
             <div class="left">SCORE</div>
             <div class="right" id="score">0</div>
+          </div>
+          <div class="info-box">
+            <div class="left">TIME</div>
+            <div class="right" id="time">0</div>
+          </div>
+        </section>
+        <section id="gameover">
+          <div class="final-info">
+            GAME OVER
+            <button onclick="location.reload()">Play again</button>
           </div>
         </section>
       </div>

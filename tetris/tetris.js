@@ -6,18 +6,23 @@ const COLLISION_TYPE = {
 };
 
 class Tetris {
-  constructor(drawer, field, config = defaultConfig) {
+  constructor(drawer, field, window = window, config = defaultConfig) {
     this.field = field;
     this.drawer = drawer;
+    this.window = window;
     this.config = config;
     this.tetrominoes = config.tetrominoes;
     this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
     this.score = 0;
-
+    this.elapsedSeconds = 0;
+    this.gameOver = false;
+    
     // Events
     this.onUpdateScore = () => {};
+    this.onGameOver = () => {};
+    this.onElapsedSecond = () => {};
   }
 
   /**
@@ -74,63 +79,102 @@ class Tetris {
   }
 
   /**
-   * Sets the keys listeners and handles the event
+   * Sets the listeners and handles the event
    */
-  setKeyListeners() {
-    document.addEventListener('keydown', (e) => {
-      const isArrow = [37, 38, 39, 40].indexOf(e.keyCode) !== -1;
-      if (!isArrow || this.currentTetromino.isLocked()) { 
-        return false;
+  setListeners() {
+    this.keyListener = this.keyListener.bind(this);
+    this.stepListener = this.stepListener.bind(this);
+    this.elapsedSecondsListener = this.elapsedSecondsListener.bind(this);
+    this.window.addEventListener('keydown', this.keyListener);
+    this.intervalId = setInterval(this.stepListener, 1000);
+    this.elapsedSecondsId = setInterval(this.elapsedSecondsListener, 1000);
+  }
+
+  /**
+   * Handles the timer event to move down the tetromino
+   */
+  stepListener() {
+    this.checkDown();
+  }
+
+  /**
+   * Handles the elapsed second timer
+   */
+  elapsedSecondsListener() {
+    this.elapsedSeconds++;
+    this.onElapsedSecond(this.elapsedSeconds);
+  }
+
+  /**
+   * Handles the direction keys events
+   * @param {KeyboardEvent} e Event 
+   */
+  keyListener(e) {
+    const isArrow = [37, 38, 39, 40].indexOf(e.keyCode) !== -1;
+    if (!isArrow || this.currentTetromino.isLocked()) { 
+      return false;
+    }
+    // Erase current Tetromino
+    this.drawTetromino(this.currentTetromino, this.config.blankColor);
+    // Left Key
+    if (e.keyCode === 37) {
+      if (!this.isThereCollision(-1, 0)) {
+        this.currentTetromino.moveLeft();
       }
-      // Erase current Tetromino
-      this.drawTetromino(this.currentTetromino, this.config.blankColor);
-      // Left Key
-      if (e.keyCode === 37) {
-        if (!this.isThereCollision(-1, 0)) {
-          this.currentTetromino.moveLeft();
-        }
+    }
+    // Up Key (Rotates the Tetromino)
+    if (e.keyCode === 38) {
+      const currentRotation = this.currentTetromino.getRotation();
+      this.currentTetromino.rotate();
+      if (this.isThereCollision(0, 0)) {
+        this.currentTetromino.setRotation(currentRotation);
       }
-      // Up Key (Rotates the Tetromino)
-      if (e.keyCode === 38) {
-        const currentRotation = this.currentTetromino.getRotation();
-        this.currentTetromino.rotate();
-        if (this.isThereCollision(0, 0)) {
-          this.currentTetromino.setRotation(currentRotation);
-        }
+    }
+    // Right Key
+    if (e.keyCode === 39) {
+      if (!this.isThereCollision(1, 0)) {
+        this.currentTetromino.moveRight();
       }
-      // Right Key
-      if (e.keyCode === 39) {
-        if (!this.isThereCollision(1, 0)) {
-          this.currentTetromino.moveRight();
-        }
-      }
-      // Down Key
-      if (e.keyCode === 40) {
-        this.drawTetromino(this.currentTetromino, this.config.blankColor);
-        if (this.isThereCollision(0, 1)) {
-          this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
-          this.currentTetromino.lock();
-          let y = this.currentTetromino.getBottomY();
-          let removedRows = 0;
-          while (y >= this.currentTetromino.getY()) {
-            if (this.field.isFullRow(y)) {
-              removedRows++;
-              this.drawer.moveAllRows(y - 1, y);
-            } else {
-              y--;
-            }
-          }
-          this.score += this.config.scoreRemoveRow * removedRows;
-          this.currentTetromino = this.getRandomTetromino();
-          this.onUpdateScore(this.score);
-        } else {
-          this.score += this.config.scoreMoveDown;
-          this.currentTetromino.moveDown();
-        }
-      }
-      // Draws the Tetromino at the new Position / Rotation
+    }
+    // Down Key
+    if (e.keyCode === 40) {
+      this.checkDown();
+      return;
+    }
+    // Draws the Tetromino at the new Position / Rotation
+    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+  }
+
+  /**
+   * Process the down movement
+   */
+  checkDown() {
+    this.drawTetromino(this.currentTetromino, this.config.blankColor);
+    if (this.isThereCollision(0, 1)) {
       this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
-    });
+      this.currentTetromino.lock();
+      let y = this.currentTetromino.getBottomY();
+      let removedRows = 0;
+      while (y >= this.currentTetromino.getY()) {
+        if (this.field.isFullRow(y)) {
+          removedRows++;
+          this.drawer.moveAllRows(y - 1, y);
+        } else {
+          y--;
+        }
+      }
+      this.score += this.config.scoreRemoveRow * removedRows;
+      this.onUpdateScore(this.score);
+      this.currentTetromino = this.getRandomTetromino();
+      // Check if the game is over
+      if (this.isThereCollision(0, 1)) {
+        this.setGameOver();
+      }
+    } else {
+      this.score += this.config.scoreMoveDown;
+      this.currentTetromino.moveDown();
+    }
+    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
   }
 
   /**
@@ -138,5 +182,30 @@ class Tetris {
    */
   getScore() {
     return this.score;
+  }
+
+  /**
+   * Returns the elapsed seconds since the game started
+   */
+  getElapsedSeconds() {
+    return this.elapsedSeconds;
+  }
+
+  /**
+   * Is the game over?
+   */
+  isGameOver() {
+    return this.gameOver;
+  }
+
+  /**
+   * Sets the game over
+   */
+  setGameOver() {
+    this.window.removeEventListener('keydown', this.keyListener);
+    clearInterval(this.intervalId);
+    clearInterval(this.elapsedSecondsId);
+    this.gameOver = true;
+    this.onGameOver();
   }
 }
