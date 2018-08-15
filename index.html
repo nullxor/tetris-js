@@ -1,7 +1,69 @@
-<script src="tetris/config.js"></script>
-<script src="tetris/field.js"></script>
-<script src="tetris/drawer.js"></script>
-<script src="tetris/tetromino.js"></script>
-<script src="tetris/tetris.js"></script>
-<script src="tetris/index.js"></script>
-<canvas id="tetris" width="200" height="400"></canvas>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tetris</title>
+  <link href="https://fonts.googleapis.com/css?family=Nova+Square" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Nova Square', cursive;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #f7f7f7;
+    }
+    .container {
+      padding: 1%;
+    }
+    .canvas-wrap {
+      clear: both;
+      overflow: hidden;
+      width: 420px;
+
+    }
+    .info-box {
+      border: 1px solid #ccc;
+      box-shadow: #ccc 0 0 5px;
+      clear: both;
+      font-size: 1.5em;
+      overflow: hidden;
+      padding: 3%;
+    }
+    .info-box .left {
+      float: left;
+    }
+    .info-box .right {
+      float: right;
+    }
+    .info, .canvas {
+      width: 50%;
+      float: left;
+    }
+  </style> 
+</head>
+<body>
+    <script src="tetris/config.js"></script>
+    <script src="tetris/field.js"></script>
+    <script src="tetris/drawer.js"></script>
+    <script src="tetris/tetromino.js"></script>
+    <script src="tetris/tetris.js"></script>
+    <script src="tetris/index.js"></script>
+    <main class="container">
+      <div class="canvas-wrap">
+        <section class="canvas">
+          <canvas id="tetris" width="200" height="400"></canvas>
+        </section>
+        <section class="info">
+          <div class="info-box">
+            <div class="left">SCORE</div>
+            <div class="right" id="score">0</div>
+          </div>
+        </section>
+      </div>
+    </main>
+</body>
+</html>

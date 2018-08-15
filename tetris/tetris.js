@@ -14,10 +14,10 @@ class Tetris {
     this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+    this.score = 0;
 
     // Events
-    this.onTetrominoMoveDown = () => {};
-    this.onTetrominoLockedDown = () => {};
+    this.onUpdateScore = () => {};
   }
 
   /**
@@ -65,7 +65,7 @@ class Tetris {
     const matrix = tetromino.getCurrentMatrix();
     for (let row = 0; row < matrix.length; row++) {
       for (let col = 0; col < matrix.length; col++) {
-        if (matrix[row][col] > 0) {
+        if (matrix[row][col]) {
           const x = tetromino.getX() + col, y = tetromino.getY() + row;
           this.drawer.block(x, y, color, borderColor);
         }
@@ -120,17 +120,23 @@ class Tetris {
               y--;
             }
           }
-          this.onTetrominoLockedDown(this.currentTetromino.getY(), removedRows);
+          this.score += this.config.scoreRemoveRow * removedRows;
           this.currentTetromino = this.getRandomTetromino();
+          this.onUpdateScore(this.score);
         } else {
+          this.score += this.config.scoreMoveDown;
           this.currentTetromino.moveDown();
-          this.onTetrominoMoveDown(this.currentTetromino.getY());
         }
       }
       // Draws the Tetromino at the new Position / Rotation
-      if (isArrow) {
-        this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
-      }
+      this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
     });
+  }
+
+  /**
+   * Returns the current score
+   */
+  getScore() {
+    return this.score;
   }
 }
