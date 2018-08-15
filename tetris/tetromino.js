@@ -6,13 +6,14 @@
 class Tetromino {
   /**
    * Default constructor
+   * @param {Array} type Array of NxN Binary matrices
    * @param {number} startX Initial X position
    * @param {number} startY Initial Y position
    * @param {string} color Valid css color
-   * @param {Array} type Array of NxN Binary matrices
+   * @param {string} borderColor Valid css color
    */
-  constructor(startX, startY, color, type) {
-    [this.x, this.y, this.color, this.type] = [startX, startY, color, type];
+  constructor(type, startX, startY, color, borderColor) {
+    [this.type, this.x, this.y, this.color, this.borderColor] = [type, startX, startY, color, borderColor];
     this.rotation = 0;
     this.locked = false;
   }

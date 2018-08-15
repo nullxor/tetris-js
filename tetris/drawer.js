@@ -10,6 +10,7 @@ class Drawer {
    * @param {string} blankColor Valid css color
    */
   constructor(canvas, field, blockSize, blankColor) {
+    this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.field = field;
     this.blockSize = blockSize;
@@ -43,6 +44,31 @@ class Drawer {
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         this.block(col, row, backgroundColor, borderColor);
+      }
+    }
+  }
+
+  /**
+   * Clear the canvas
+   */
+  reset() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  /**
+   * Draws a Tetromino
+   * @param {Tetromino} tetromino Tetromino
+   * @param {string} color Valid css color
+   * @param {string} borderColor Valid css color
+   */
+  drawTetromino(tetromino, color = tetromino.color, borderColor = tetromino.borderColor) {
+    const matrix = tetromino.getCurrentMatrix();
+    for (let row = 0; row < matrix.length; row++) {
+      for (let col = 0; col < matrix.length; col++) {
+        if (matrix[row][col]) {
+          const x = tetromino.getX() + col, y = tetromino.getY() + row;
+          this.block(x, y, color, borderColor);
+        }
       }
     }
   }

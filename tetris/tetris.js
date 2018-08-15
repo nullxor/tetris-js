@@ -7,32 +7,50 @@ const COLLISION_TYPE = {
 
 class Tetris {
   constructor(drawer, field, window = window, config = defaultConfig) {
+    // Events
+    this.onUpdateScore = () => {};
+    this.onGameOver = () => {};
+    this.onElapsedSecond = () => {};
+    this.onRandomTetromino = () => {};
+
+    // Properties
     this.field = field;
     this.drawer = drawer;
     this.window = window;
     this.config = config;
     this.tetrominoes = config.tetrominoes;
-    this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
-    this.currentTetromino = this.getRandomTetromino();
-    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
     this.score = 0;
     this.elapsedSeconds = 0;
-    this.gameOver = false;
-    
-    // Events
-    this.onUpdateScore = () => {};
-    this.onGameOver = () => {};
-    this.onElapsedSecond = () => {};
+    this.gameOver = false;    
   }
 
   /**
-   * Returns a random Tetromino
+   * Starts the game
+   */
+  start() {
+    this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
+    this.setRandomTetromino();
+    this.drawer.drawTetromino(this.currentTetromino);
+  }
+
+  /**
+   * Sets a random Tetromino (current and next)
+   */
+  setRandomTetromino() {
+    this.currentTetromino = this.nextTetromino || this.getRandomTetromino();
+    this.nextTetromino = this.getRandomTetromino();
+    this.currentTetromino.x = (this.config.columns / 2) - 1;
+    this.onRandomTetromino(this.nextTetromino);
+  }
+
+  /**
+   * Gets a random Tetromino
    */
   getRandomTetromino() {
     const colors = this.config.tetrominoesColor;
-    const randomColor = Math.floor(Math.random() * (colors.length));
-    const randomIndex = Math.floor(Math.random() * (this.tetrominoes.length));
-    return new Tetromino((this.config.columns / 2) - 1 , 0, colors[randomColor], this.tetrominoes[randomIndex]);
+    const randomColor = Math.floor(Math.random() * colors.length);
+    const randomIndex = Math.floor(Math.random() * this.tetrominoes.length);
+    return new Tetromino(this.tetrominoes[randomIndex], 0, 0, colors[randomColor], this.config.borderColor);
   }
 
   /**
@@ -58,24 +76,6 @@ class Tetris {
       }
     }
     return 0;
-  }
-
-  /**
-   * Draws a Tetromino
-   * @param {Tetromino} tetromino Tetromino
-   * @param {string} color Valid css color
-   * @param {string} borderColor Valid css color
-   */
-  drawTetromino(tetromino, color, borderColor = this.config.borderColor) {
-    const matrix = tetromino.getCurrentMatrix();
-    for (let row = 0; row < matrix.length; row++) {
-      for (let col = 0; col < matrix.length; col++) {
-        if (matrix[row][col]) {
-          const x = tetromino.getX() + col, y = tetromino.getY() + row;
-          this.drawer.block(x, y, color, borderColor);
-        }
-      }
-    }
   }
 
   /**
@@ -115,7 +115,7 @@ class Tetris {
       return false;
     }
     // Erase current Tetromino
-    this.drawTetromino(this.currentTetromino, this.config.blankColor);
+    this.drawer.drawTetromino(this.currentTetromino, this.config.blankColor);
     // Left Key
     if (e.keyCode === 37) {
       if (!this.isThereCollision(-1, 0)) {
@@ -142,16 +142,16 @@ class Tetris {
       return;
     }
     // Draws the Tetromino at the new Position / Rotation
-    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+    this.drawer.drawTetromino(this.currentTetromino);
   }
 
   /**
    * Process the down movement
    */
   checkDown() {
-    this.drawTetromino(this.currentTetromino, this.config.blankColor);
+    this.drawer.drawTetromino(this.currentTetromino, this.config.blankColor);
     if (this.isThereCollision(0, 1)) {
-      this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+      this.drawer.drawTetromino(this.currentTetromino);
       this.currentTetromino.lock();
       let y = this.currentTetromino.getBottomY();
       let removedRows = 0;
@@ -165,7 +165,7 @@ class Tetris {
       }
       this.score += this.config.scoreRemoveRow * removedRows;
       this.onUpdateScore(this.score);
-      this.currentTetromino = this.getRandomTetromino();
+      this.setRandomTetromino();
       // Check if the game is over
       if (this.isThereCollision(0, 1)) {
         this.setGameOver();
@@ -174,7 +174,7 @@ class Tetris {
       this.score += this.config.scoreMoveDown;
       this.currentTetromino.moveDown();
     }
-    this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+    this.drawer.drawTetromino(this.currentTetromino);
   }
 
   /**
@@ -189,6 +189,13 @@ class Tetris {
    */
   getElapsedSeconds() {
     return this.elapsedSeconds;
+  }
+
+  /**
+   * Returns the next tetromino
+   */
+  getNextTetromino() {
+    return this.nextTetromino;
   }
 
   /**
