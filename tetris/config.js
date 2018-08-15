@@ -138,7 +138,13 @@ const defaultConfig = {
 
   // Border color
   borderColor: '#111',
-  
+
+  // Score after moving down a tetromino
+  scoreMoveDown: 1,
+
+  // Score after removing a row
+  scoreRemoveRow: 5,
+
   // Tetrominoes
   tetrominoes: [
     TETROMINO_I,

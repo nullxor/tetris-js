@@ -1,7 +1,62 @@
-<script src="tetris/config.js"></script>
-<script src="tetris/field.js"></script>
-<script src="tetris/drawer.js"></script>
-<script src="tetris/tetromino.js"></script>
-<script src="tetris/tetris.js"></script>
-<script src="tetris/index.js"></script>
-<canvas id="tetris" width="200" height="400"></canvas>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tetris</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #f7f7f7;
+    }
+    .container {
+      padding: 1%;
+    }
+    .canvas-wrap {
+      border: 1px solid gray;
+      clear: both;
+      overflow: hidden;
+      width: 400px;
+
+    }
+    .info {
+      text-align: left;
+    }
+    .info * {
+      margin-left: 1%;
+    }
+    .info, .canvas {
+      width: 50%;
+      float: left;
+    }
+    canvas {
+      margin-bottom: -5px;
+    }
+  </style> 
+</head>
+<body>
+    <script src="tetris/config.js"></script>
+    <script src="tetris/field.js"></script>
+    <script src="tetris/drawer.js"></script>
+    <script src="tetris/tetromino.js"></script>
+    <script src="tetris/tetris.js"></script>
+    <script src="tetris/index.js"></script>
+    <main class="container">
+      <div class="canvas-wrap">
+        <section class="canvas">
+          <canvas id="tetris" width="200" height="400"></canvas>
+        </section>
+        <section class="info">
+          <div class="container">
+            <span>SCORE</span> <div id="score">0</div>
+          </div>
+        </section>
+      </div>
+    </main>
+</body>
+</html>

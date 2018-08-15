@@ -14,10 +14,10 @@ class Tetris {
     this.drawer.grid(this.config.rows, this.config.columns, this.config.blankColor, this.config.borderColor);
     this.currentTetromino = this.getRandomTetromino();
     this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
+    this.score = 0;
 
     // Events
-    this.onTetrominoMoveDown = () => {};
-    this.onTetrominoLockedDown = () => {};
+    this.onUpdateScore = () => {};
   }
 
   /**
@@ -120,15 +120,23 @@ class Tetris {
               y--;
             }
           }
-          this.onTetrominoLockedDown(this.currentTetromino.getY(), removedRows);
+          this.score += this.config.scoreRemoveRow * removedRows;
           this.currentTetromino = this.getRandomTetromino();
         } else {
+          this.score += this.config.scoreMoveDown;
           this.currentTetromino.moveDown();
-          this.onTetrominoMoveDown(this.currentTetromino.getY());
         }
+        this.onUpdateScore(this.score);
       }
       // Draws the Tetromino at the new Position / Rotation
       this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
     });
+  }
+
+  /**
+   * Returns the current score
+   */
+  getScore() {
+    return this.score;
   }
 }
