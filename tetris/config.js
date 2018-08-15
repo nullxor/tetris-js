@@ -134,10 +134,10 @@ const defaultConfig = {
   columns: 10,
 
   // Blank Color
-  blankColor: '#111',
+  blankColor: '#000',
 
   // Border color
-  borderColor: '#111',
+  borderColor: '#000',
 
   // Score after moving down a tetromino
   scoreMoveDown: 1,
@@ -155,5 +155,5 @@ const defaultConfig = {
     TETROMINO_L,
     TETROMINO_J,
   ],
-  tetrominoesColor: ['#d11', '#1d1', '#11d', '#dd1', '#d1d', '#1cd', '#fdd']
+  tetrominoesColor: ['#d11', '#1d1', '#11f', '#dd1', '#d1d', '#1cd', '#fdd']
 }
