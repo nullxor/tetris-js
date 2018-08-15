@@ -5,11 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Tetris</title>
+  <link href="https://fonts.googleapis.com/css?family=Nova+Square" rel="stylesheet">
   <style>
     * {
+      box-sizing: border-box;
+      font-family: 'Nova Square', cursive;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
     body {
       background-color: #f7f7f7;
@@ -18,24 +20,28 @@
       padding: 1%;
     }
     .canvas-wrap {
-      border: 1px solid gray;
       clear: both;
       overflow: hidden;
-      width: 400px;
+      width: 420px;
 
     }
-    .info {
-      text-align: left;
+    .info-box {
+      border: 1px solid #ccc;
+      box-shadow: #ccc 0 0 5px;
+      clear: both;
+      font-size: 1.5em;
+      overflow: hidden;
+      padding: 3%;
     }
-    .info * {
-      margin-left: 1%;
+    .info-box .left {
+      float: left;
+    }
+    .info-box .right {
+      float: right;
     }
     .info, .canvas {
       width: 50%;
       float: left;
-    }
-    canvas {
-      margin-bottom: -5px;
     }
   </style> 
 </head>
@@ -52,8 +58,9 @@
           <canvas id="tetris" width="200" height="400"></canvas>
         </section>
         <section class="info">
-          <div class="container">
-            <span>SCORE</span> <div id="score">0</div>
+          <div class="info-box">
+            <div class="left">SCORE</div>
+            <div class="right" id="score">0</div>
           </div>
         </section>
       </div>

@@ -122,11 +122,11 @@ class Tetris {
           }
           this.score += this.config.scoreRemoveRow * removedRows;
           this.currentTetromino = this.getRandomTetromino();
+          this.onUpdateScore(this.score);
         } else {
           this.score += this.config.scoreMoveDown;
           this.currentTetromino.moveDown();
         }
-        this.onUpdateScore(this.score);
       }
       // Draws the Tetromino at the new Position / Rotation
       this.drawTetromino(this.currentTetromino, this.currentTetromino.color);
