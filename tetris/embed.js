@@ -26,12 +26,49 @@ const template =
 </main>`;
 
 class TetrisBuilder {
-  createTetris(container) {
+  constructor(container, config) {
     container.innerHTML = template;
+    this.container = container;
+    this.gameOverElement = document.getElementById('gameover');
+    this.config = config;
+    this.scoreElement = document.getElementById('score');
+    this.timeElement = document.getElementById('time');
+    this.field = new Field(this.config.rows, this.config.columns);
+    this.drawer = new Drawer(document.getElementById('tetris'), this.field, this.config.blockSize, this.config.blankColor);
+    this.tetris = new Tetris(this.drawer, this.field, window, this.config);
+    this.fieldNextPiece = new Field(5, 5);
+    this.drawerNextPiece = new Drawer(document.getElementById('nextPiece'), this.fieldNextPiece, 15, this.config.blankColor);
+    this.tetris.setListeners();
+    this.tetris.onUpdateScore = (score) => {
+      this.scoreElement.innerText = score;
+    };
+    this.tetris.onGameOver = this.onGameOver.bind(this);
+    this.tetris.onElapsedSecond = this.onElapsedSecond.bind(this);
+    this.tetris.onRandomTetromino = this.onRandomTetromino.bind(this);
+  }
+
+  onGameOver() {
+    this.gameOverElement.style = 'visibility: visible';
+  }
+
+  onElapsedSecond(totalSeconds) {
+    this.timeElement.innerText = totalSeconds;
+  }
+
+  onRandomTetromino(tetromino) {
+    this.drawerNextPiece.reset();
+    this.drawerNextPiece.drawTetromino(tetromino);  
+  }
+
+  newGame() {
+    this.gameOverElement.style = 'visibility: hidden';
+    this.scoreElement.innerText = this.timeElement.innerText = 0;
+    this.tetris.start();  
   }
   
-  destroyTetris(container) {
-    container.innerHTML = '';
+  destroyTetris() {
+    this.tetris.setGameOver();
+    this.container.innerHTML = '';
   }  
 }
 
