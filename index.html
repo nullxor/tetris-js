@@ -1,5 +1,46 @@
-<script src="tetris/field.js"></script>
-<script src="tetris/tetromino.js"></script>
-<script src="tetris/tetris.js"></script>
-<script src="tetris/index.js"></script>
-<canvas id="tetris" width="200" height="400"></canvas>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tetris</title>
+  <link href="https://fonts.googleapis.com/css?family=Nova+Square" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script src="tetris/config.js"></script>
+    <script src="tetris/field.js"></script>
+    <script src="tetris/drawer.js"></script>
+    <script src="tetris/tetromino.js"></script>
+    <script src="tetris/tetris.js"></script>
+    <script src="tetris/index.js"></script>
+    <main class="container">
+      <div class="canvas-wrap">
+        <section class="canvas">
+          <canvas id="tetris" width="200" height="400"></canvas>
+        </section>
+        <section class="info">
+          <div class="info-box">
+            <div class="left">SCORE</div>
+            <div class="right" id="score">0</div>
+          </div>
+          <div class="info-box">
+            <div class="left">TIME</div>
+            <div class="right" id="time">0</div>
+          </div>
+          <div class="info-box">
+            <div class="left">NEXT PIECE</div>
+            <div class="right"><canvas id="nextPiece" width="60" height="40"></canvas></div>
+          </div>
+        </section>
+        <section id="gameover">
+          <div class="final-info">
+            GAME OVER
+            <button onclick="location.reload()">Play again</button>
+          </div>
+        </section>
+      </div>
+    </main>
+</body>
+</html>
