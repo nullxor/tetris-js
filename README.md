@@ -6,5 +6,5 @@ Another Tetris game that uses a canvas to draw the field and the classic tetromi
 2. npm install
 3. npm run-script build
 
-### Licence
+### License
 MIT
