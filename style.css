@@ -3,7 +3,8 @@
   font-family: 'Nova Square', cursive;
 }
 body {
-  background-color: #f7f7f7;
+  background-color: #333;
+  color: #f7f7f7;
 }
 .container {
   padding: 1%;
@@ -15,8 +16,7 @@ body {
   width: 420px;
 }
 .info-box {
-  border: 1px solid #ccc;
-  box-shadow: #ccc 0 0 5px;
+  background-color: #111;
   clear: both;
   font-size: 1em;
   margin-bottom: 2%;
@@ -50,4 +50,18 @@ body {
 button {
   font-family: Helvetica;
   padding: 1%;
+}
+.next-piece {
+  text-align: center;
+  margin-top: 5%;
+}
+#playgame {
+  background-color: rgba(1,1,1, .5);
+  height: 100%;
+  position: relative;
+  width: 100%;
+  z-index: 100;
+}
+.link {
+  color: white;
 }
