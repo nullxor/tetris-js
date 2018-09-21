@@ -1,8 +1,6 @@
 * {
   box-sizing: border-box;
   font-family: 'Nova Square', cursive;
-  margin: 0;
-  padding: 0;
 }
 body {
   background-color: #f7f7f7;
@@ -46,19 +44,10 @@ body {
   width: 100%;
   z-index: 100;
 }
-#gameover .final-info {
-  color: #611;
-  font-size: 2em;
-  text-align: center;
-}
 .text-center {
   text-align: center;
 }
 button {
   font-family: Helvetica;
   padding: 1%;
-}
-.next-piece {
-  text-align: center;
-  margin-top: 5%;
 }

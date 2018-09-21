@@ -3,7 +3,7 @@
  * The representation (type) must be an Array
  * of NxN Binary Matrices (each matrix represents a rotation)
  */
-class Tetromino {
+export default class Tetromino {
   /**
    * Default constructor
    * @param {Array} type Array of NxN Binary matrices

@@ -123,7 +123,7 @@ const TETROMINO_J =
   ],  
 ];
 
-const defaultConfig = {
+export default {
   // Block size in pixels
   blockSize: 20,
   
