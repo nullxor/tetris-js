@@ -5,7 +5,7 @@
  * The return value for a given coordinate is an Object of this type
  * { isFull: true, color: 'color', borderColor: 'bordercolor' }
  */
-class Field {
+export default class Field {
   /**
    * Default constructor
    * @param {number} rows Rows 

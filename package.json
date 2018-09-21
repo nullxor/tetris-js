@@ -1,0 +1,28 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "Another tetris game implementation using vanilla JavaScript",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
+  },
+  "scripts": {
+    "build": "node_modules/.bin/webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nullxor/tetris-js.git"
+  },
+  "keywords": [
+    "Tetris"
+  ],
+  "author": "Olfran Jiménez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nullxor/tetris-js/issues"
+  },
+  "homepage": "https://github.com/nullxor/tetris-js#readme"
+}

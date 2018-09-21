@@ -1,7 +1,7 @@
 /**
  * Allow to draw and handle blocks operations in a Canvas
  */
-class Drawer {
+export default class Drawer {
   /**
    * Default constructor
    * @param {Canvas} canvas Canvas element

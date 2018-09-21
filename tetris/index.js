@@ -1,7 +1,15 @@
-window.addEventListener('load', () => {
-  const cfg = defaultConfig;
-  const scoreElement = document.getElementById('score');
+import config from './config';
+import Field from './field';
+import Drawer from './drawer';
+import Tetris from './tetris';
+
+window.addEventListener('load', startNewGame);
+
+function startNewGame() {
   const gameOverElement = document.getElementById('gameover');
+  gameOverElement.style = 'visibility: hidden';
+  const cfg = config;
+  const scoreElement = document.getElementById('score');
   const timeElement = document.getElementById('time');
   const field = new Field(cfg.rows, cfg.columns);
   const drawer = new Drawer(document.getElementById('tetris'), field, cfg.blockSize, cfg.blankColor);
@@ -9,6 +17,7 @@ window.addEventListener('load', () => {
   const fieldNextPiece = new Field(5, 5);
   const drawerNextPiece = new Drawer(document.getElementById('nextPiece'), fieldNextPiece, 15, cfg.blankColor);
   tetris.setListeners();
+  scoreElement.innerText = timeElement.innerText = 0;
   tetris.onUpdateScore = (score) => {
     scoreElement.innerText = score;
   };
@@ -23,4 +32,5 @@ window.addEventListener('load', () => {
     drawerNextPiece.drawTetromino(tetromino);
   }
   tetris.start();
-});
+  document.getElementById('newGame').addEventListener('click', startNewGame);
+}

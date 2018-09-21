@@ -9,13 +9,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <script src="tetris/config.js"></script>
-    <script src="tetris/field.js"></script>
-    <script src="tetris/drawer.js"></script>
-    <script src="tetris/tetromino.js"></script>
-    <script src="tetris/tetris.js"></script>
-    <script src="tetris/index.js"></script>
-    <main class="container">
+    <script src="dist/tetrisbundle.js"></script>
+    <main id="main" class="container">
       <div class="canvas-wrap">
         <section class="canvas">
           <canvas id="tetris" width="200" height="400"></canvas>
@@ -30,15 +25,11 @@
             <div class="right" id="time">0</div>
           </div>
           <div class="info-box">
-            <div class="left">NEXT PIECE</div>
-            <div class="right"><canvas id="nextPiece" width="60" height="40"></canvas></div>
+            <canvas id="nextPiece" width="60" height="40"></canvas>
           </div>
         </section>
-        <section id="gameover">
-          <div class="final-info">
-            GAME OVER
-            <button onclick="location.reload()">Play again</button>
-          </div>
+        <section id="gameover" class="text-center">
+          <button id="newGame">Play again</button>
         </section>
       </div>
     </main>
